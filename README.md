@@ -22,4 +22,4 @@ Here are the features the workshop helps to put in place:
 
 # Click below to preview the game
 
-[![clic to open the video](https://i.ytimg.com/vi/XOiMm5J43jc/2.jpg?time=1527855045347)](https://www.youtube.com/embed/XOiMm5J43jc?ecver=2)
+[![clic to open the video](https://img.youtube.com/vi/XOiMm5J43jc/0.jpg)](https://www.youtube.com/embed/XOiMm5J43jc?ecver=2)
