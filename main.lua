@@ -120,11 +120,6 @@ function love.update(dt)
     balle.vy = -balle.vy
   end
   
-  -- On modifie l'angle de rebond sur la rquette selon la zone d'impact
-  if balle.x >= (pad.x - pad.largeur/2) and balle.x <= (pad.x - pad.largeur/4) and balle.y >= (pad.y - pad.hauteur/2 - balle.radius) then
-    balle.vy = -balle.vy
-  end
-  
   -- On repositionne la balle sur la raquette si elle disparait
   if balle.y >= hauteur - balle.radius then
     demarre()
