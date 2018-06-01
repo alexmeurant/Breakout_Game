@@ -19,3 +19,7 @@ Here are the features the workshop helps to put in place:
 - Acceleration of the ball when a brick is hit
 - A sound effect when a brick is hit
 - A background music
+
+# Click below to preview the game
+
+[![clic to open the video](https://i.ytimg.com/vi/XOiMm5J43jc/2.jpg?time=1527855045347)](https://www.youtube.com/embed/XOiMm5J43jc?ecver=2)
