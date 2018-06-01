@@ -12,3 +12,10 @@ Here are the features the workshop helps to put in place:
 - A ball that is launched by clicking
 - This one will then bounce on the walls, the bricks, and the racket
 - When a brick is hit, it is destroyed and the ball reverses its course
+
+**Here are the features I have added:**
+
+- Improvement of collisions
+- Acceleration of the ball when a brick is hit
+- A sound effect when a brick is hit
+- A background music
