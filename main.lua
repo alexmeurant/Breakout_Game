@@ -66,6 +66,9 @@ function love.load()
   music:setLooping( true ) -- La musique ne s'arrête pas
   music:play()
   
+  -- Ajout d'un fond d'écran
+  background = love.graphics.newImage("images/space_bg.png")
+  
 end
 
 function love.update(dt)
@@ -131,6 +134,9 @@ end
 
 
 function love.draw()
+  
+  -- Affiche le fond d'écran
+  love.graphics.draw(background, -100, 0)
   
   -- Dessine les briques
   local l,c
