@@ -2,12 +2,16 @@ love.window.setTitle("Breakout")
 
 -------------------------------------------------------------------------
 
+-- Création d'un joueur
+player = {}
+
 -- Création d'une raquette qui sera manipulée par le joueur
 local pad = {}
 pad.x = 0
 pad.y = 0
 pad.largeur = 80
 pad.hauteur = 20
+pad.vx = 10
 
 -- Création d'une balle
 local balle = {}
@@ -26,14 +30,16 @@ local brique = {}
 local niveau = {}
 niveau.briques = {}
 
--- On positionne la balle sur la raquette à chaque démarrage
-function demarre()
+-- On réinitialise le jeu à chaque nouvelle partie
+function newGame()
   
-  balle.colle = true
-  
-  -- On vide le niveau de ses briques et on affiche toutes les briques lors du démarrage
+  -- On vide le niveau de ses briques
   niveau = {}
   
+  -- La balle est positionnée sur la raquette en début de partie
+  balle.colle = true
+  
+  -- On repère les briques par une grille
   local l,c
   for l=1,6 do
     niveau[l] = {}
@@ -41,6 +47,19 @@ function demarre()
       niveau[l][c] = 1
     end
   end
+  
+  -- Initialisation des paramètres du joueur
+  player.score = 0
+  player.life = 3
+
+end
+
+
+function demarre()
+  
+  -- La balle est positionnée sur la raquette à chaque balle perdue
+  balle.colle = true
+  
 end
 
 function love.load()
@@ -54,11 +73,11 @@ function love.load()
   brique.hauteur = 25
   
   -- Positionne la raquette en bas d'écran (mouvements droite et gauche uniquement)
-  pad.y = hauteur - (pad.hauteur/2)
+  pad.y = hauteur - pad.hauteur*2
   pad.x = largeur/2
   
-  -- Positionne la balle lors du chargement du jeu
-  demarre()
+  -- On démarre une nouvelle partie
+  newGame()
   
   -- Musique d'ambiance et effet sonore
   explosion = love.audio.newSource("sounds/fun_explosion.wav", "stream")
@@ -72,9 +91,20 @@ function love.load()
 end
 
 function love.update(dt)
+  
+  -- Le joueur lance la balle
+  if player.life > 0 and love.keyboard.isDown("space") then
+    if balle.colle == true then
+      launchBall()
+    end
+  end
 
   -- On récupére la position de la sourie que l'on renvoie à la raquette
-  pad.x = love.mouse.getX()
+  if love.keyboard.isDown("right") then
+      pad.x = pad.x + pad.vx
+  elseif love.keyboard.isDown("left") then
+      pad.x = pad.x - pad.vx
+  end
   
   -- On ajuste les limites de mouvements de la raquette pour éviter les collapses sur les bords de la map
   if pad.x <= pad.largeur/2 then
@@ -83,7 +113,7 @@ function love.update(dt)
     pad.x = largeur - pad.largeur/2
   end
   
-  -- On positionne la balle sur la raquette lors du démarrage et la balle est lancée si on clique sur un bouton de la souris
+  -- On positionne la balle sur la raquette lors du démarrage
   if balle.colle == true then
     balle.x = pad.x
     balle.y = pad.y - pad.hauteur/2 - balle.radius
@@ -103,6 +133,7 @@ function love.update(dt)
       niveau[l][c] = 0 -- La brique touchée disparait
       balle.vy = -balle.vy -- La balle rebondit
       balle.vy = balle.vy*balle.acceleration -- La balle accélère à chaque brique cassée
+      player.score = player.score + 50
     end
   end
   
@@ -121,8 +152,18 @@ function love.update(dt)
   end
   
   -- On repositionne la balle sur la raquette si elle disparait
-  if balle.y >= hauteur - balle.radius then
-    demarre()
+  if balle.y >= hauteur then
+    player.life = player.life - 1 -- Le joueur perd une vie si la balle disparait
+    if player.life > 0 then
+      demarre()
+    else
+      player.life = 0
+      if love.keyboard.isDown("space") then
+        balle.x = pad.x
+        balle.y = pad.y - pad.hauteur/2 - balle.radius
+        newGame()
+      end
+    end
   end
   
 end
@@ -132,6 +173,23 @@ function love.draw()
   
   -- Affiche le fond d'écran
   love.graphics.draw(background, -100, 0)
+  
+  -- Affiche le score et les vies
+  local afficheScore = "Score : "
+  afficheScore = afficheScore..tostring(player.score)
+  love.graphics.print(afficheScore, 5, hauteur - 25)
+  
+  local afficheVies = "Life : "
+  afficheVies = afficheVies..tostring(player.life)
+  love.graphics.print(afficheVies, largeur - 50, hauteur - 25)
+  
+  if balle.colle and player.life > 0 then
+    love.graphics.print("Please click on SPACE to launch the ball", largeur/3, hauteur/2)
+  end
+  
+  if player.life <= 0 then
+    love.graphics.print("You lose ! To play again, please click on SPACE button", largeur/3, hauteur/2)
+  end
   
   -- Dessine les briques
   local l,c
@@ -156,13 +214,13 @@ function love.draw()
   
 end
 
-function love.mousepressed(x, y, n)
+function launchBall()
     -- On décolle la balle et on lui donne une impulsion
-    if balle.colle == true then
-      balle.colle = false
-      balle.vx = 200
-      balle.vy = -200
-    end
+      if balle.colle == true then
+        balle.colle = false
+        balle.vx = 200
+        balle.vy = -200
+      end
 end
   
   
