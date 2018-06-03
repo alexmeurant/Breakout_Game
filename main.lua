@@ -17,10 +17,10 @@ pad.vx = 10
 local balle = {}
 balle.x = 0
 balle.y = 0
-balle.radius = 10
 balle.colle = false
 balle.vx = 0
 balle.vy = 0
+balle.radius = 0
 balle.acceleration = 1.03
 
 -- Création d'une brique
@@ -68,6 +68,18 @@ function love.load()
   largeur = love.graphics.getWidth()
   hauteur = love.graphics.getHeight()
   
+  -- Ajout d'un fond d'écran
+  background = love.graphics.newImage("images/space_bg.png")
+  
+  -- Ajout du pad
+  padImage = love.graphics.newImage("images/pad.png")
+  pad.largeur = padImage:getWidth()
+  pad.hauteur = padImage:getHeight()
+  
+  -- Ajout de la balle
+  balleImage = love.graphics.newImage("images/balle.png")
+  balle.radius = balleImage:getWidth()
+  
   -- On définit les dimensions d'une brique en fonction de la fenêtre
   brique.largeur = largeur/15
   brique.hauteur = 25
@@ -85,9 +97,6 @@ function love.load()
   music:setLooping( true ) -- La musique ne s'arrête pas
   music:play()
   
-  -- Ajout d'un fond d'écran
-  background = love.graphics.newImage("images/space_bg.png")
-  
 end
 
 function love.update(dt)
@@ -99,7 +108,7 @@ function love.update(dt)
     end
   end
 
-  -- On récupére la position de la sourie que l'on renvoie à la raquette
+  -- On dirige la raquette avec les flèches
   if love.keyboard.isDown("right") then
       pad.x = pad.x + pad.vx
   elseif love.keyboard.isDown("left") then
@@ -115,7 +124,7 @@ function love.update(dt)
   
   -- On positionne la balle sur la raquette lors du démarrage
   if balle.colle == true then
-    balle.x = pad.x
+    balle.x = pad.x - balle.radius/2
     balle.y = pad.y - pad.hauteur/2 - balle.radius
   else 
     balle.x = balle.x + balle.vx*dt
@@ -138,9 +147,9 @@ function love.update(dt)
   end
   
   -- Gestion de la collision entre la balle et les murs
-  if balle.x >= largeur - balle.radius then
+  if balle.x >= largeur - balle.radius - 1 then
     balle.vx = -balle.vx
-  elseif balle.x <= balle.radius then
+  elseif balle.x <= 1 then
     balle.vx = -balle.vx
   elseif balle.y <= balle.radius then
     balle.vy = -balle.vy
@@ -206,11 +215,11 @@ function love.draw()
     by = by + brique.hauteur -- On décale la ligne d'une hauteur de brique
   end
   
-  -- Dessine la raquette
-  love.graphics.rectangle("fill", pad.x - (pad.largeur/2), pad.y - (pad.hauteur/2), pad.largeur, pad.hauteur)
+  -- Affiche la raquette
+  love.graphics.draw(padImage, pad.x - (pad.largeur/2), pad.y - (pad.hauteur/2))
   
-  -- Dessine une balle
-  love.graphics.circle("fill", balle.x, balle.y, balle.radius)
+  -- Affiche une balle
+  love.graphics.draw(balleImage, balle.x, balle.y)
   
 end
 
