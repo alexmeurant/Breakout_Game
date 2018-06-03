@@ -78,14 +78,16 @@ function love.load()
   
   -- Ajout de la balle
   balleImage = love.graphics.newImage("images/balle.png")
-  balle.radius = balleImage:getWidth()
+  balle.x = balleImage:getWidth()/2
+  balle.y = balleImage:getHeight()/2
+  balle.radius = balleImage:getWidth()/2
   
   -- On définit les dimensions d'une brique en fonction de la fenêtre
   brique.largeur = largeur/15
   brique.hauteur = 25
   
   -- Positionne la raquette en bas d'écran (mouvements droite et gauche uniquement)
-  pad.y = hauteur - pad.hauteur*2
+  pad.y = hauteur - 40
   pad.x = largeur/2
   
   -- On démarre une nouvelle partie
@@ -124,8 +126,8 @@ function love.update(dt)
   
   -- On positionne la balle sur la raquette lors du démarrage
   if balle.colle == true then
-    balle.x = pad.x - balle.radius/2
-    balle.y = pad.y - pad.hauteur/2 - balle.radius
+    balle.x = pad.x
+    balle.y = pad.y - balle.radius*2
   else 
     balle.x = balle.x + balle.vx*dt
     balle.y = balle.y + balle.vy*dt
@@ -149,14 +151,14 @@ function love.update(dt)
   -- Gestion de la collision entre la balle et les murs
   if balle.x >= largeur - balle.radius - 1 then
     balle.vx = -balle.vx
-  elseif balle.x <= 1 then
+  elseif balle.x <= balle.radius + 1 then
     balle.vx = -balle.vx
-  elseif balle.y <= balle.radius then
+  elseif balle.y <= balle.radius + 1 then
     balle.vy = -balle.vy
   end
   
   -- Gestion de la collision entre la balle et la raquette
-  if balle.x >= (pad.x - pad.largeur/2) and balle.x <= (pad.x + pad.largeur/2) and balle.y >= (pad.y - pad.hauteur/2 - balle.radius) then
+  if balle.x >= (pad.x - pad.largeur/2 - 1) and balle.x <= (pad.x + pad.largeur/2 + 1) and balle.y >= (pad.y - pad.hauteur/2 - balle.radius - 1) then
     balle.vy = -balle.vy
   end
   
@@ -181,7 +183,7 @@ end
 function love.draw()
   
   -- Affiche le fond d'écran
-  love.graphics.draw(background, -100, 0)
+  love.graphics.draw(background, 0, 0)
   
   -- Affiche le score et les vies
   local afficheScore = "Score : "
@@ -219,7 +221,7 @@ function love.draw()
   love.graphics.draw(padImage, pad.x - (pad.largeur/2), pad.y - (pad.hauteur/2))
   
   -- Affiche une balle
-  love.graphics.draw(balleImage, balle.x, balle.y)
+  love.graphics.draw(balleImage, balle.x - (balle.radius), balle.y - (balle.radius))
   
 end
 
