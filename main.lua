@@ -86,6 +86,11 @@ function love.load()
   
   -- On charge l'image d'une brique et on définit ses dimensions en fonction de la fenêtre
   briqueRouge = love.graphics.newImage("images/red_brick.png")
+  briqueVerte = love.graphics.newImage("images/green_brick.png")
+  briqueBleue = love.graphics.newImage("images/blue_brick.png")
+  briqueRose = love.graphics.newImage("images/pink_brick.png")
+  briqueOrange = love.graphics.newImage("images/orange_brick.png")
+  briqueViolette = love.graphics.newImage("images/purple_brick.png")
   brique.largeur = largeur/17
   brique.hauteur = briqueRouge:getHeight()
   
@@ -211,9 +216,21 @@ function love.draw()
   for l=1,6 do
     bx = 0 -- On revient au départ entre chaque ligne
     for c=1,17 do
-      if niveau[l][c] == 1 then
+      if niveau[l][c] == 1 then 
         -- Affiche une brique
+        if l == 1 then
         love.graphics.draw(briqueRouge, bx + 2, by + 2)
+        elseif l == 2 then
+        love.graphics.draw(briqueVerte, bx + 2, by + 2)
+        elseif l == 3 then
+        love.graphics.draw(briqueBleue, bx + 2, by + 2)
+        elseif l == 4 then
+        love.graphics.draw(briqueRose, bx + 2, by + 2)
+        elseif l == 5 then
+        love.graphics.draw(briqueOrange, bx + 2, by + 2)
+        elseif l == 6 then
+        love.graphics.draw(briqueViolette, bx + 2, by + 2)
+        end
       end
       bx = bx + brique.largeur -- On décale chaque brique d'une largeur de brique
     end
