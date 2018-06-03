@@ -25,6 +25,8 @@ balle.acceleration = 1.03
 
 -- Création d'une brique
 local brique = {}
+brique.largeur = 0
+brique.hauteur = 0
 
 -- Création d'un niveau
 local niveau = {}
@@ -43,7 +45,7 @@ function newGame()
   local l,c
   for l=1,6 do
     niveau[l] = {}
-    for c=1,15 do
+    for c=1,17 do
       niveau[l][c] = 1
     end
   end
@@ -82,9 +84,10 @@ function love.load()
   balle.y = balleImage:getHeight()/2
   balle.radius = balleImage:getWidth()/2
   
-  -- On définit les dimensions d'une brique en fonction de la fenêtre
-  brique.largeur = largeur/15
-  brique.hauteur = 25
+  -- On charge l'image d'une brique et on définit ses dimensions en fonction de la fenêtre
+  briqueRouge = love.graphics.newImage("images/red_brick.png")
+  brique.largeur = largeur/17
+  brique.hauteur = briqueRouge:getHeight()
   
   -- Positionne la raquette en bas d'écran (mouvements droite et gauche uniquement)
   pad.y = hauteur - 40
@@ -138,7 +141,7 @@ function love.update(dt)
   local l = math.floor(balle.y / brique.hauteur) + 1
   
   -- On vérifie si la balle touche une brique
-  if l >= 1 and l <= #niveau and c >= 1 and c <= 15 then
+  if l >= 1 and l <= #niveau and c >= 1 and c <= 17 then
     if niveau[l][c] == 1 then
       explosion:play() -- Effet sonore de la brique qui explose
       niveau[l][c] = 0 -- La brique touchée disparait
@@ -149,9 +152,9 @@ function love.update(dt)
   end
   
   -- Gestion de la collision entre la balle et les murs
-  if balle.x >= largeur - balle.radius - 1 then
+  if balle.x >= largeur - balle.radius - 2 then
     balle.vx = -balle.vx
-  elseif balle.x <= balle.radius + 1 then
+  elseif balle.x <= balle.radius + 2 then
     balle.vx = -balle.vx
   elseif balle.y <= balle.radius + 1 then
     balle.vy = -balle.vy
@@ -207,10 +210,10 @@ function love.draw()
   local bx,by = 0,0 -- Coordonnées de la 1ère brique
   for l=1,6 do
     bx = 0 -- On revient au départ entre chaque ligne
-    for c=1,15 do
+    for c=1,17 do
       if niveau[l][c] == 1 then
-        -- Dessine une brique
-        love.graphics.rectangle("fill", bx + 1, by + 1, brique.largeur - 2, brique.hauteur - 2)
+        -- Affiche une brique
+        love.graphics.draw(briqueRouge, bx + 2, by + 2)
       end
       bx = bx + brique.largeur -- On décale chaque brique d'une largeur de brique
     end
