@@ -19,7 +19,11 @@ Here are the features the workshop helps to put in place:
 - Acceleration of the ball when a brick is hit
 - A sound effect when a brick is hit
 - A background music
+- Pad controlling with arrows
+- Pad's position
+- Player object added
+- Score, lifes, newgame management
 
 # Click below to preview the game
 
-[![clic to open the video](https://img.youtube.com/vi/XOiMm5J43jc/0.jpg)](https://www.youtube.com/embed/XOiMm5J43jc?ecver=2)
+[![clic to play the preview game](https://img.youtube.com/vi/U00ulF2kvP8/0.jpg)](https://www.youtube.com/embed/U00ulF2kvP8?ecver=2)
