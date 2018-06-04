@@ -20,9 +20,10 @@ Here are the features the workshop helps to put in place:
 - A sound effect when a brick is hit
 - A background music
 - Pad controlling with arrows
-- Pad's position
+- Pad's position and collision improvement
 - Player object added
 - Score, lifes, newgame management
+- Custom crystal bricks (Free Vector Graphics by <a target="_blank" href="https://www.vecteezy.com/">Vecteezy.com</a>)
 
 # Click below to preview the game
 
