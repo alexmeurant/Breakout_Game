@@ -43,9 +43,9 @@ function newGame()
   
   -- On repère les briques par une grille
   local l,c
-  for l=1,6 do
+  for l=1,8 do
     niveau[l] = {}
-    for c=1,17 do
+    for c=1,15 do
       niveau[l][c] = 1
     end
   end
@@ -85,14 +85,9 @@ function love.load()
   balle.radius = balleImage:getWidth()/2
   
   -- On charge l'image d'une brique et on définit ses dimensions en fonction de la fenêtre
-  briqueRouge = love.graphics.newImage("images/red_brick.png")
-  briqueVerte = love.graphics.newImage("images/green_brick.png")
-  briqueBleue = love.graphics.newImage("images/blue_brick.png")
-  briqueRose = love.graphics.newImage("images/pink_brick.png")
-  briqueOrange = love.graphics.newImage("images/orange_brick.png")
-  briqueViolette = love.graphics.newImage("images/purple_brick.png")
-  brique.largeur = largeur/17
-  brique.hauteur = briqueRouge:getHeight()
+  crystal = love.graphics.newImage("images/crystal.png")
+  brique.largeur = largeur/15
+  brique.hauteur = crystal:getHeight()
   
   -- Positionne la raquette en bas d'écran (mouvements droite et gauche uniquement)
   pad.y = hauteur - 40
@@ -111,7 +106,7 @@ end
 
 function love.update(dt)
   
-  -- Le joueur lance la balle
+    -- Le joueur lance la balle
   if player.life > 0 and love.keyboard.isDown("space") then
     if balle.colle == true then
       launchBall()
@@ -146,13 +141,13 @@ function love.update(dt)
   local l = math.floor(balle.y / brique.hauteur) + 1
   
   -- On vérifie si la balle touche une brique
-  if l >= 1 and l <= #niveau and c >= 1 and c <= 17 then
+  if l >= 1 and l <= #niveau and c >= 1 and c <= 15 then
     if niveau[l][c] == 1 then
       explosion:play() -- Effet sonore de la brique qui explose
       niveau[l][c] = 0 -- La brique touchée disparait
       balle.vy = -balle.vy -- La balle rebondit
       balle.vy = balle.vy*balle.acceleration -- La balle accélère à chaque brique cassée
-      player.score = player.score + 50
+      player.score = player.score + 50 
     end
   end
   
@@ -166,8 +161,12 @@ function love.update(dt)
   end
   
   -- Gestion de la collision entre la balle et la raquette
-  if balle.x >= (pad.x - pad.largeur/2 - 1) and balle.x <= (pad.x + pad.largeur/2 + 1) and balle.y >= (pad.y - pad.hauteur/2 - balle.radius - 1) then
-    balle.vy = -balle.vy
+  if balle.x >= (pad.x - pad.largeur/2 - 1) and balle.x <= (pad.x + pad.largeur/2 + 1) and balle.y >= (pad.y - pad.hauteur/2 - balle.radius + 1) then
+    if balle.y >= pad.y - pad.hauteur/2 then
+      balle.vx = -balle.vx
+    else
+      balle.vy = -balle.vy
+    end
   end
   
   -- On repositionne la balle sur la raquette si elle disparait
@@ -213,28 +212,16 @@ function love.draw()
   -- Dessine les briques
   local l,c
   local bx,by = 0,0 -- Coordonnées de la 1ère brique
-  for l=1,6 do
+  for l=1,8 do
     bx = 0 -- On revient au départ entre chaque ligne
-    for c=1,17 do
+    for c=1,15 do
       if niveau[l][c] == 1 then 
         -- Affiche une brique
-        if l == 1 then
-        love.graphics.draw(briqueRouge, bx + 2, by + 2)
-        elseif l == 2 then
-        love.graphics.draw(briqueVerte, bx + 2, by + 2)
-        elseif l == 3 then
-        love.graphics.draw(briqueBleue, bx + 2, by + 2)
-        elseif l == 4 then
-        love.graphics.draw(briqueRose, bx + 2, by + 2)
-        elseif l == 5 then
-        love.graphics.draw(briqueOrange, bx + 2, by + 2)
-        elseif l == 6 then
-        love.graphics.draw(briqueViolette, bx + 2, by + 2)
-        end
+        love.graphics.draw(crystal, bx + 2, by + 2)
       end
       bx = bx + brique.largeur -- On décale chaque brique d'une largeur de brique
     end
-    by = by + brique.hauteur -- On décale la ligne d'une hauteur de brique
+    by = by + brique.hauteur + 1 -- On décale la ligne d'une hauteur de brique + 1px
   end
   
   -- Affiche la raquette
