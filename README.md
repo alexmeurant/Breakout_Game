@@ -27,4 +27,4 @@ Here are the features the workshop helps to put in place:
 
 # Click below to preview the game
 
-[![clic to play the preview game](https://img.youtube.com/vi/y5s97LbQfeE/0.jpg)](https://www.youtube.com/embed/y5s97LbQfeE?ecver=2)
+[![clic to play the preview game](https://img.youtube.com/vi/HwQA06rrygI/0.jpg)](https://www.youtube.com/embed/HwQA06rrygI?ecver=2)
